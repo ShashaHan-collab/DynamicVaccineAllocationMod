@@ -3,7 +3,7 @@ Dynamic Vaccine Allocation Model
 
 This model allocates a limited daily supply of vaccines, where the allocations are coupled with dynamics of disease transmissions. It was used in a recent XX paper (Put Citation Here).
 
-For an example run of the optimal allocation over the full period, please see "run_approx_opt.py", which uses a dummy intermediate dataset "test input opt approxmation.csv". For an example run of the uniform allocation, please see "run_unif.R", which uses a dummy parameter dataset "test input parameter.csv". For an example run of the optimal allocation using myopic strategies, please see "run_myopic_opt.R", which generates intermediate dataset "test input opt approxmation.csv".
+For an example run of the optimal allocation over the full period, please see "opt_approx_alloc.py", which uses a dummy intermediate dataset "test input opt approxmation.csv". For an example run of the uniform allocation, please see "base_unif_alloc.R", which uses a dummy parameter dataset "test input parameter.csv". For an example run of the optimal allocation using myopic strategies, please see "opt_myopic_alloc.R", which generates intermediate dataset "test input opt approxmation.csv".
 
 # Overall model
 
@@ -23,8 +23,8 @@ For an example run of the optimal allocation over the full period, please see "r
 * zoo
 
 # Descriptions of the files
-* run_unif.R: R script to generate results for the scenario without vaccines and the uniform allocation. The script calls vaccine_aloc_utlis.R to perform the allocation.
-* run_myopic_opt.R: R script for the first step optimization. The script calls myopic allocations in vaccine_aloc_utlis.R to optimization allocatoin daily. It generates intermediate data for the second step of optimization.
-* run_run_approx_opt.py: Python script for the second step optimization. The script uses the intermedate data from the first step to optimization the allocation over the full period. The script generates the optimal solutions with respect to the targeted risks, which are input as parameters.
+* base_unif_alloc.R: R script to generate results for the scenario without vaccines and the uniform allocation. The script calls vaccine_aloc_utlis.R to perform the allocation.
+* opt_myopic_alloc.R: R script for the first step optimization. The script calls myopic allocations in vaccine_aloc_utlis.R to optimize allocatoin daily. It generates intermediate data for the second step of optimization.
+* opt_approx_alloc.py: Python script for the second step optimization. The script optimize allocation over the full period useing the intermedate data generated from the first step. The script generates the final optimal solutions with respect to the given targeted risks. The demo uses the death risk.  
 
 
