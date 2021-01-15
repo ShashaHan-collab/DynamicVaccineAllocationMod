@@ -10,12 +10,14 @@ For an example run of the optimal allocation over the full period, please see "r
 
 # Prerequesites
 ## Prerequesite softwares 
-* Item Gurobi version 9.1.0.
-* Item R version 4.0.3
-* Item Python 3.9.0
+* Gurobi version 9.1.0.
+* R version 4.0.3
+* Python 3.9.0
 ## Prerequisite third-party R packages
-* Item gurobi
-* Item readxl
-* Item tidyverse
-* Item sfsmisc
-* Item deSolve
+* gurobi
+* readxl
+* tidyverse
+* sfsmisc
+* deSolve
+* Matrix
+* zoo
