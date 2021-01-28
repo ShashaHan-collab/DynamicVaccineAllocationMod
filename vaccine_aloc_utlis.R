@@ -32,6 +32,7 @@ SIRfunc <- function(time, state, parms){
   I    = as.matrix(state[(3*nage+1):(4*nage)])
   R    = as.matrix(state[(4*nage+1):(5*nage)])
   
+  S = pmax(S,0)
   V = pmax(V,0)
   U = pmax(U,0)
   I = pmax(I,0)
@@ -59,6 +60,7 @@ allocation_model <- function(param,policy){
     I    = as.matrix(state[(3*nage+1):(4*nage)])
     R    = as.matrix(state[(4*nage+1):(5*nage)])
     
+    S = pmax(S,0)
     V = pmax(V,0)
     U = pmax(U,0)
     I = pmax(I,0)
@@ -208,7 +210,12 @@ va_alloc <- function(beta,S_t,Vca,I_t,cpt,C,N,param,policy){
 
 # Uniform allocation
 dynamic_unif_alloc <- function(S,Vca3,cpt){
-  x <- pmin(S,Vca3)/sum(pmin(S,Vca3))*cpt 
+  prop <- pmax(0,pmin(S,Vca3))
+  if (sum(prop) >= cpt){
+    x <- prop/sum(prop)*cpt  
+  }else{
+    x <- prop
+  }
   return(x)
 }
 
