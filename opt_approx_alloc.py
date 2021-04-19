@@ -37,7 +37,7 @@ beta = 0.0223921  # calcuated from running "run_unif.R".
 gamma = 1/5.5
 w = 1/35
 max_capacity = 4000000/2 # daily supplies
-epsilon = 0.2  
+epsilon = 0.4  
 
 for groupJ in groups:
     for group in groups:
