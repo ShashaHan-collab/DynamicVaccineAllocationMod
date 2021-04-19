@@ -78,7 +78,7 @@ param$cpt =  4000000/2
 
 # Exiting rate from vacciation state
 param$w = 1/35
-# Time to start vaccinations
+# Time to start vaccinations relative to the epidemic, defualt 1.
 param$epoch = 1  
 ###############################################################################
 ## The scenario without vaccine
