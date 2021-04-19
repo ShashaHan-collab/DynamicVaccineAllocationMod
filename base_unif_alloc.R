@@ -9,7 +9,7 @@ require("sfsmisc")
 require("deSolve")
 
 ##################################################################################
-setwd("~/Dropbox/ProjectCoding/Vaccine Allocation/two_stage")
+setwd("~/...")
 dio <- "."
 dout <- file.path(dio, "GitHubTest") #
 source('vaccine_aloc_utlis.R') 
