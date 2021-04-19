@@ -5,14 +5,17 @@ from functools import reduce
 import gurobipy as gp
 from gurobipy import GRB
 
-# Parameters
+# Contact matrix
 contact_mat = pd.read_excel('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/two_stage/GitHubTest/input/cm_china_17gr_python.xlsx', index_col=0)
+# Population segmentation
 pop_data = pd.read_excel(open('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/two_stage/GitHubTest/input/target_population_1209_python.xlsx', 'rb'),sheet_name='population', index_col=0)
 pop = pop_data["Total"]
 pop_tier = pop_data[{"Tier12","Tier3"}]
+# Heterogenous susceptability
 ra = pop_data["heter susceptability"]
-
+# Vaccine accpetance
 va = pd.read_excel(open('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/two_stage/GitHubTest/input/target_population_1216_python.xlsx', 'rb'),sheet_name='acceptance12', index_col=0)
+# Risk of disease burdens
 risk_data = pd.read_excel(open('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/two_stage/GitHubTest/input/disease_burden-1117_python.xlsx', 'rb'),sheet_name='risk rates', index_col=0)
 # Targeted risk in optimization
 risk = risk_data["Deaths in infections"]
@@ -21,6 +24,7 @@ targetI = pd.read_csv('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/tw
 
 groups = list(pop_data.index)
 
+# Period
 T = 400 
 days = range(0,T+1)
 tiers = ["Tier12", "Tier3"]
@@ -29,14 +33,15 @@ ve = {"Group1":0.80*0.75, "Group2":0.80*0.75, "Group3":0.80*0.75, "Group4":0.80,
       "Group11":0.80, "Group12":0.80, "Group13":0.80*0.75, "Group14":0.80*0.75, "Group15":0.80*0.75, "Group16":0.80*0.75, "Group17":0.80*0.75}
 
 
-beta = 0.02230163 # calcuated from running "run_unif.R".
+beta = 0.0223921  # calcuated from running "run_unif.R".
 gamma = 1/5.5
 w = 1/35
 max_capacity = 4000000/2 # daily supplies
 epsilon = 0.2  
 
-for group in groups:
-    contact_mat[group] = contact_mat[group] * ra[group]
+for groupJ in groups:
+    for group in groups:
+        contact_mat[groupJ][group] = contact_mat[groupJ][group] * ra[group]
 
 
 vaCpt = gp.Model('Vaccination Capacity I')
