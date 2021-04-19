@@ -6,21 +6,21 @@ import gurobipy as gp
 from gurobipy import GRB
 
 # Contact matrix
-contact_mat = pd.read_excel('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/two_stage/GitHubTest/input/cm_china_17gr_python.xlsx', index_col=0)
+contact_mat = pd.read_excel('.../GitHubTest/input/cm_china_17gr_python.xlsx', index_col=0)
 # Population segmentation
-pop_data = pd.read_excel(open('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/two_stage/GitHubTest/input/target_population_1209_python.xlsx', 'rb'),sheet_name='population', index_col=0)
+pop_data = pd.read_excel(open('.../GitHubTest/input/target_population_1209_python.xlsx', 'rb'),sheet_name='population', index_col=0)
 pop = pop_data["Total"]
 pop_tier = pop_data[{"Tier12","Tier3"}]
 # Heterogenous susceptability
 ra = pop_data["heter susceptability"]
 # Vaccine accpetance
-va = pd.read_excel(open('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/two_stage/GitHubTest/input/target_population_1216_python.xlsx', 'rb'),sheet_name='acceptance12', index_col=0)
+va = pd.read_excel(open('.../GitHubTest/input/target_population_1216_python.xlsx', 'rb'),sheet_name='acceptance12', index_col=0)
 # Risk of disease burdens
-risk_data = pd.read_excel(open('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/two_stage/GitHubTest/input/disease_burden-1117_python.xlsx', 'rb'),sheet_name='risk rates', index_col=0)
+risk_data = pd.read_excel(open('.../GitHubTest/input/disease_burden-1117_python.xlsx', 'rb'),sheet_name='risk rates', index_col=0)
 # Targeted risk in optimization
 risk = risk_data["Deaths in infections"]
 # Dyanmics from the myopic optimization
-targetI = pd.read_csv('/Users/shasha/Dropbox/ProjectCoding/Vaccine Allocation/two_stage/GitHubTest/intermediate/test input opt approxmation.csv', index_col=0)
+targetI = pd.read_csv('.../GitHubTest/intermediate/test input opt approxmation.csv', index_col=0)
 
 groups = list(pop_data.index)
 
