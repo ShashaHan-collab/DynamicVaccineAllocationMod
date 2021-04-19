@@ -95,6 +95,12 @@ inits=c(S=S_0,V=V_0,U= U_0, I=I_0,R=R_0)
 vt = seq(0,Timelim,1)
 svirmodel = as.data.frame(lsoda(inits, vt, SIRfunc, vparameters))
 
+###############################################################################
+## Optimal vaccine allocation: minimize the infection cases
+###############################################################################
+out <- allocation_model(param,"minInfec")
+svir.opt.infec <- out$svir
+V.opt.count <- out$vaccine
 
 ###############################################################################
 ## The uniform allocation
@@ -105,3 +111,7 @@ V.unif.count <- out$vaccine
 
 # output the results for the two scenarios: baseline and the uniform
 save(svirmodel, svir.unif.infec,V.unif.count, file = "GitHubTest/output/base_unif.RData")
+# output the I^Myopic 
+output <- svir.opt.infec %>% select(time, paste0("I",1:nage,sep = "")) ##
+names(output) <- c("time", paste0("Group",1:nage,sep = ""))
+write.csv(output, file = "targetI.csv", row.names = FALSE)
