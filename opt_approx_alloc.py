@@ -13,6 +13,7 @@ pop = pop_data["Total"]
 pop_tier = pop_data[{"Tier12","Tier3"}]
 # Heterogenous susceptability
 ra = pop_data["heter susceptability"]
+ra = ra/max(ra)
 # Vaccine accpetance
 va = pd.read_excel(open('.../GitHubTest/input/target_population_1216_python.xlsx', 'rb'),sheet_name='acceptance12', index_col=0)
 # Risk of disease burdens
