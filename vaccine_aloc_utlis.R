@@ -11,12 +11,12 @@ require(zoo)
 cal_beta <- function(C,N,R0,gamma){
   prop = N/sum(N) 
   M = C 
-  nage = length(N)
-  for(i in 1:nage){ 
-    for(j in 1:nage){
-      M[i,j] <- C[i,j]*prop[i]/prop[j]
-    }
-  }
+  # nage = length(N)
+  # for(i in 1:nage){ 
+  #   for(j in 1:nage){
+  #     M[i,j] <- C[i,j]*prop[i]/prop[j]
+  #   }
+  # }
   eig = eigen(M)
   beta = R0*gamma/max(Re(eig$values))  
 }
