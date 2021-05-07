@@ -74,16 +74,14 @@ ProgressS = vaCpt.addConstrs((stateS[days[days.index(day) +1], group] >= stateS[
                              (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
                              for groupJ in groups)) for group in groups for day in days if day != T), name="ProgressS")
 ProgressV = vaCpt.addConstrs((stateV[days[days.index(day) +1], group] >= (stateV[day, group] + gp.quicksum(alloc_tier[day,group,tier] for tier in tiers)) * (1-w) -
-                             (stateV[day, group] + gp.quicksum(alloc_tier[day,group,tier] for tier in tiers)) * (1-w) * 
-                             beta * (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
+                             stateV[day, group] * beta * (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
                              for groupJ in groups)) for group in groups for day in days if day != T), name="ProgressV")
-ProgressU = vaCpt.addConstrs((stateU[days[days.index(day) +1], group] >= stateU[day, group] + (stateV[day, group] +
-                             gp.quicksum(alloc_tier[day,group,tier] for tier in tiers)) * w * (1-ve[group]) - stateU[day, group]*
+ProgressU = vaCpt.addConstrs((stateU[days[days.index(day) +1], group] >= stateU[day, group] + stateV[day, group]  * w * (1-ve[group]) - stateU[day, group]*
                              beta * (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
                              for groupJ in groups)) for group in groups for day in days if day != T), name="ProgressU")
 ProgressI = vaCpt.addConstrs((stateI[days[days.index(day) +1], group] >= stateI[day,group] *( 1-gamma) +
                              (stateS[day, group] + stateU[day, group] +
-                             stateV[day,group] * (1-w) - gp.quicksum(alloc_tier[day,group,tier] for tier in tiers) * w) *
+                             stateV[day,group] - gp.quicksum(alloc_tier[day,group,tier] for tier in tiers)) *
                              beta * (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
                              for groupJ in groups)) for group in groups for day in days if day != T), name="ProgressI")
 
