@@ -38,12 +38,12 @@ SIRfunc <- function(time, state, parms){
   I = pmax(I,0)
   with(as.list(parms),{
     N = S+V+U+I+R
-    dS = - as.matrix(v) -as.matrix((S - v)*beta)*(C%*%as.matrix(I/N))
-    dV = + as.matrix(v) -as.matrix((V+v)*w) -as.matrix((V+v)*(1-w)*beta)*(C%*%as.matrix(I/N))
-    dU = + as.matrix((V+v)*w)*as.matrix(1-eff)-as.matrix(U*beta)*(C%*%as.matrix(I/N))
-    dI = + as.matrix((S + U + V*(1-w) - v*w)*beta)*(C%*%as.matrix(I/N)) - gamma*as.matrix(I)
-    dR = + gamma*as.matrix(I) + as.matrix((V+v)*w)*as.matrix(eff)
-    out=c(dS,dV,dU,dI,dR)
+   dS = - as.matrix(v) -as.matrix((S - v)*beta)*(C%*%as.matrix(I/N))
+   dV = + as.matrix(v) -as.matrix((V)*w) -as.matrix((V)*beta)*(C%*%as.matrix(I/N))
+   dU = + as.matrix((V)*w)*as.matrix(1-eff)-as.matrix(U*beta)*(C%*%as.matrix(I/N))
+   dI = + as.matrix((S + U + V - v)*beta)*(C%*%as.matrix(I/N)) - gamma*as.matrix(I)
+   dR = + gamma*as.matrix(I) + as.matrix((V)*w)*as.matrix(eff)
+   out=c(dS,dV,dU,dI,dR)
     list(out)
   })
 }
@@ -66,12 +66,12 @@ allocation_model <- function(param,policy){
     I = pmax(I,0)
     with(as.list(parms),{
       N = S+V+U+I+R
-      dS = - as.matrix(v) -as.matrix((S - v)*beta)*(C%*%as.matrix(I/N))
-      dV = + as.matrix(v) -as.matrix((V+v)*w) -as.matrix((V+v)*(1-w)*beta)*(C%*%as.matrix(I/N))
-      dU = + as.matrix((V+v)*w)*as.matrix(1-eff)-as.matrix(U*beta)*(C%*%as.matrix(I/N))
-      dI = + as.matrix((S + U + V*(1-w) - v*w)*beta)*(C%*%as.matrix(I/N)) - gamma*as.matrix(I)
-      dR = + gamma*as.matrix(I) + as.matrix((V+v)*w)*as.matrix(eff)
-      out=c(dS,dV,dU,dI,dR)
+     dS = - as.matrix(v) -as.matrix((S - v)*beta)*(C%*%as.matrix(I/N))
+     dV = + as.matrix(v) -as.matrix((V)*w) -as.matrix((V)*beta)*(C%*%as.matrix(I/N))
+     dU = + as.matrix((V)*w)*as.matrix(1-eff)-as.matrix(U*beta)*(C%*%as.matrix(I/N))
+     dI = + as.matrix((S + U + V - v)*beta)*(C%*%as.matrix(I/N)) - gamma*as.matrix(I)
+     dR = + gamma*as.matrix(I) + as.matrix((V)*w)*as.matrix(eff)
+ out=c(dS,dV,dU,dI,dR)
       list(out)
     })
   }
