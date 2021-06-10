@@ -126,7 +126,7 @@ allocation_model <- function(param,policy){
       select(paste0("V",1:nage,sep = ""))%>%
       t(.)
     U_t <- svir.infec %>% filter(row_number()==n()) %>%
-      select(paste0("V",1:nage,sep = ""))%>%
+      select(paste0("U",1:nage,sep = ""))%>%
       t(.)
     I_t <- svir.infec %>% filter(row_number()==n()) %>%
       select(paste0("I",1:nage,sep = ""))%>%
