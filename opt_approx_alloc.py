@@ -70,8 +70,7 @@ Va_cumsum = vaCpt.addConstrs((alloc_cum[0, group] == 0 for group in groups), nam
     
 #2. ODE Progress
 ProgressS = vaCpt.addConstrs((stateS[days[days.index(day) +1], group] >= stateS[day, group] - gp.quicksum(alloc_tier[day,group,tier] for tier in tiers) -
-                             beta*(stateS[day, group] - gp.quicksum(alloc_tier[day,group,tier] for tier in tiers)) *
-                             (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
+                             beta* stateS[day, group] * (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
                              for groupJ in groups)) for group in groups for day in days if day != T), name="ProgressS")
 ProgressV = vaCpt.addConstrs((stateV[days[days.index(day) +1], group] >= (stateV[day, group] + gp.quicksum(alloc_tier[day,group,tier] for tier in tiers)) * (1-w) -
                              stateV[day, group] * beta * (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
@@ -80,8 +79,7 @@ ProgressU = vaCpt.addConstrs((stateU[days[days.index(day) +1], group] >= stateU[
                              beta * (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
                              for groupJ in groups)) for group in groups for day in days if day != T), name="ProgressU")
 ProgressI = vaCpt.addConstrs((stateI[days[days.index(day) +1], group] >= stateI[day,group] *( 1-gamma) +
-                             (stateS[day, group] + stateU[day, group] +
-                             stateV[day,group] - gp.quicksum(alloc_tier[day,group,tier] for tier in tiers)) *
+                             (stateS[day, group] + stateU[day, group] + stateV[day,group] ) *
                              beta * (gp.quicksum(contact_mat[groupJ][group] * targetI[groupJ][day]/pop[groupJ]
                              for groupJ in groups)) for group in groups for day in days if day != T), name="ProgressI")
 
