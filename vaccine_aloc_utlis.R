@@ -38,11 +38,11 @@ SIRfunc <- function(time, state, parms){
   I = pmax(I,0)
   with(as.list(parms),{
     N = S+V+U+I+R
-   dS = - as.matrix(v) -as.matrix((S - v)*beta)*(C%*%as.matrix(I/N))
-   dV = + as.matrix(v) -as.matrix((V)*w) -as.matrix((V)*beta)*(C%*%as.matrix(I/N))
-   dU = + as.matrix((V)*w)*as.matrix(1-eff)-as.matrix(U*beta)*(C%*%as.matrix(I/N))
-   dI = + as.matrix((S + U + V - v)*beta)*(C%*%as.matrix(I/N)) - gamma*as.matrix(I)
-   dR = + gamma*as.matrix(I) + as.matrix((V)*w)*as.matrix(eff)
+   dS = - as.matrix(v) -as.matrix(S*beta)*(C%*%as.matrix(I/N))
+   dV = + as.matrix(v) -as.matrix(V*w) -as.matrix(V*beta)*(C%*%as.matrix(I/N))
+   dU = + as.matrix(V *w)*as.matrix(1-eff)-as.matrix(U*beta)*(C%*%as.matrix(I/N))
+   dI = + as.matrix((S + U + V)*beta)*(C%*%as.matrix(I/N)) - gamma*as.matrix(I)
+   dR = + gamma*as.matrix(I) + as.matrix(V*w)*as.matrix(eff)
    out=c(dS,dV,dU,dI,dR)
     list(out)
   })
@@ -66,11 +66,11 @@ allocation_model <- function(param,policy){
     I = pmax(I,0)
     with(as.list(parms),{
       N = S+V+U+I+R
-     dS = - as.matrix(v) -as.matrix((S - v)*beta)*(C%*%as.matrix(I/N))
-     dV = + as.matrix(v) -as.matrix((V)*w) -as.matrix((V)*beta)*(C%*%as.matrix(I/N))
-     dU = + as.matrix((V)*w)*as.matrix(1-eff)-as.matrix(U*beta)*(C%*%as.matrix(I/N))
-     dI = + as.matrix((S + U + V - v)*beta)*(C%*%as.matrix(I/N)) - gamma*as.matrix(I)
-     dR = + gamma*as.matrix(I) + as.matrix((V)*w)*as.matrix(eff)
+   dS = - as.matrix(v) -as.matrix(S*beta)*(C%*%as.matrix(I/N))
+   dV = + as.matrix(v) -as.matrix(V*w) -as.matrix(V*beta)*(C%*%as.matrix(I/N))
+   dU = + as.matrix(V *w)*as.matrix(1-eff)-as.matrix(U*beta)*(C%*%as.matrix(I/N))
+   dI = + as.matrix((S + U + V)*beta)*(C%*%as.matrix(I/N)) - gamma*as.matrix(I)
+   dR = + gamma*as.matrix(I) + as.matrix(V*w)*as.matrix(eff)
  out=c(dS,dV,dU,dI,dR)
       list(out)
     })
@@ -144,7 +144,18 @@ allocation_model <- function(param,policy){
     
     #  Sum every nage columns to get the total allocation for an age group
     v <- sapply(seq(1,nage,by=1),function(i) sum(v.update[c(i,i+nage)]))
-    vparameters2 =c(gamma=gamma,beta=beta, eff = eff,v = v, w = w, C=C)
+    if(policy == "dynUnif"){
+      vparameters2 =c(gamma=gamma,beta=beta, eff = eff,v = v,w = w, C=C)
+    }else{
+      # update the initial conditions immediately after allocations
+      S_t = S_t - v
+      # an instant outflow out results instant inflow for the following states
+      V_t = V_t + v -w*v
+      U_t = U_t + (1-eff)*w*v
+      R_t = R_t + eff*w*v
+      v <- as.matrix(rep(0, nage))
+      vparameters2 =c(gamma=gamma,beta=beta, eff = eff,v = v,w = w, C=C)
+    }
     inits=c(S=S_t,V=V_t,U=U_t,I=I_t,R=R_t)
     
     # Progress to the next day
@@ -184,15 +195,15 @@ va_alloc <- function(beta,S_t,Vca,I_t,cpt,C,N,param,policy){
       cpt <-  max(0,cpt-sum(Vca[1:nage]))
       Vca3 <- Vca[(nage + 1): (nage*ntiers)]
       if(policy == "minInfec"){
-        x3 <- opt_infec_alloc(beta,S_t,Vca3,I_t,cpt,C, N) 
+        x3 <- opt_infec_alloc(beta,S_t,Vca3,I_t,cpt,C, N, eff) 
       }else if(policy == "minHosp"){
-        x3 <- opt_hosp_alloc(beta,S_t,Vca3,I_t,cpt,C,N,param$hosp) 
+        x3 <- opt_hosp_alloc(beta,S_t,Vca3,I_t,cpt,C,N,param$hosp,eff) 
       }else if(policy == "minDeath"){
-        x3 <- opt_death_alloc(beta,S_t,Vca3,I_t,cpt,C, N,param$deathr) 
+        x3 <- opt_death_alloc(beta,S_t,Vca3,I_t,cpt,C, N,param$deathr,eff) 
       }else if(policy == "minICU"){
-        x3 <- opt_icu_alloc(beta,S_t,Vca3,I_t,cpt,C,N,param$icur) 
+        x3 <- opt_icu_alloc(beta,S_t,Vca3,I_t,cpt,C,N,param$icur,eff) 
       }else if(policy == "minSymp"){
-        x3 <- opt_symp_alloc(beta,S_t,Vca3,I_t,cpt,C,N,param$symp) 
+        x3 <- opt_symp_alloc(beta,S_t,Vca3,I_t,cpt,C,N,param$symp,eff) 
       }else if(policy == "dynUnif"){
         x3 <- dynamic_unif_alloc(S_t,Vca3,cpt) 
       }
@@ -220,8 +231,9 @@ dynamic_unif_alloc <- function(S,Vca3,cpt){
 }
 
 # Optimal allocation minimizing daily infections
-opt_infec_alloc <- function(beta,S,Vca,I,cpt,C,N){
+opt_infec_alloc <- function(beta,S,Vca,I,cpt,C,N,eff){
   lambda <- beta*C%*%as.matrix(I/N)
+  lambda <- lambda * eff 
   
   model <- list()
   
@@ -238,9 +250,9 @@ opt_infec_alloc <- function(beta,S,Vca,I,cpt,C,N){
 }
 
 # Optimal allocation minimizing daily symptomatic cases
-opt_symp_alloc <- function(beta,S,Vca,I,cpt,C,N,symp){
+opt_symp_alloc <- function(beta,S,Vca,I,cpt,C,N,symp,eff){
   lambda <- beta*C%*%as.matrix(I/N)
-  lambda <- lambda *symp
+  lambda <- lambda *symp*eff
   model <- list()
   
   model$A          <- matrix(rep(1,length(S)), nrow=1, byrow=T) # contraint matrix
@@ -256,9 +268,9 @@ opt_symp_alloc <- function(beta,S,Vca,I,cpt,C,N,symp){
 }
 
 # Optimal allocation minimizing daily hospitlaizations
-opt_hosp_alloc <- function(beta,S,Vca,I,cpt,C,N,hosp){
+opt_hosp_alloc <- function(beta,S,Vca,I,cpt,C,N,hosp,eff){
   lambda <- beta*C%*%as.matrix(I/N)
-  lambda <- lambda *hosp
+  lambda <- lambda *hosp*eff
   model <- list()
   
   model$A          <- matrix(rep(1,length(S)), nrow=1, byrow=T) # contraint matrix
@@ -274,9 +286,9 @@ opt_hosp_alloc <- function(beta,S,Vca,I,cpt,C,N,hosp){
 }
 
 # Optimal allocation minimizing daily ICUs
-opt_icu_alloc <- function(beta,S,Vca,I,cpt,C,N,icur){
+opt_icu_alloc <- function(beta,S,Vca,I,cpt,C,N,icur,eff){
   lambda <- beta*C%*%as.matrix(I/N)
-  lambda <- lambda *icur
+  lambda <- lambda *icur*eff
   model <- list()
   
   model$A          <- matrix(rep(1,length(S)), nrow=1, byrow=T) # contraint matrix
@@ -292,9 +304,9 @@ opt_icu_alloc <- function(beta,S,Vca,I,cpt,C,N,icur){
 }
 
 # Optimal allocation minimizing daily deaths
-opt_death_alloc <- function(beta,S,Vca,I,cpt,C,N,deathr){
+opt_death_alloc <- function(beta,S,Vca,I,cpt,C,N,deathr,eff){
   lambda <- beta*C%*%as.matrix(I/N)
-  lambda <- lambda *deathr
+  lambda <- lambda *deathr*eff
   
   model <- list()
   
