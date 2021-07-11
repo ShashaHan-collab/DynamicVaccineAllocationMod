@@ -6,7 +6,7 @@ This model allocates a limited daily supply of vaccines, where the allocations a
 For an example run of the optimal allocation over the full period, please see "opt_approx_alloc.py", which uses a dummy intermediate dataset "test input opt approxmation.csv". For an example run of the uniform allocation, please see "base_unif_alloc.R", which uses a dummy parameter dataset "test input parameter.csv". For an example run of the optimal allocation using myopic strategies, please see "opt_myopic_alloc.R", which generates intermediate dataset "test input opt approxmation.csv".
 
 # Overall model
-This model optimizes the daily allocation of COVID-19 vaccines to different age groups. The SARS-CoV-2 transmission dynamics are modelled using an using an age-structured compartmental model. A two-step optimization strategy was explored in the optimization.
+This model optimizes the daily allocation of COVID-19 vaccines to different age groups. The SARS-CoV-2 transmission dynamics are modelled using an using an age-structured compartmental model. A two-step optimization strategy was explored.
 
 # Prerequesites
 ## Prerequesite softwares 
