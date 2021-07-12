@@ -11,8 +11,8 @@ This model optimizes the daily allocation of two-doses COVID-19 vaccines to diff
 # Prerequesites
 ## Prerequesite softwares 
 * Gurobi version 9.1.0.
-* R version 4.0.3
-* Python 3.9.0
+* R version 4.0.3.
+* Python 3.9.0.
 ## Prerequisite third-party R packages
 * gurobi
 * readxl
