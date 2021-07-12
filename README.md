@@ -21,6 +21,10 @@ This model optimizes the daily allocation of two-doses COVID-19 vaccines to diff
 * deSolve
 * Matrix
 * zoo
+* glue
+* xlsx
+* cowplot
+* scales
 
 # Descriptions of the files
 * base_unif_alloc.R: R script to generate results for the scenario without vaccines and the uniform allocation. The script calls vaccine_aloc_utlis.R to perform the allocation.
