@@ -1,7 +1,7 @@
 # DynamicVaccineAllocationMod
 Dynamic Vaccine Allocation Model
 
-This model allocates a limited daily supply of vaccines, where the allocations are coupled with dynamics of disease transmissions. It was used in a recent paper Han, S., Cai J., Yang J. et al (2021). Time-varying optimization of COVID-19 vaccine prioritization in the context of limited vaccination capacity.
+This model allocates a limited daily supply of vaccines, where the allocations are coupled with dynamics of disease transmissions. It was used in a recent paper: Han, S., Cai J., Yang J. et al (2021). Time-varying optimization of COVID-19 vaccine prioritization in the context of limited vaccination capacity.
 
 For an example run of the optimal allocation over the full period, please see "opt_approx_alloc.py", which uses a dummy intermediate dataset "test input opt approxmation.csv". For an example run of the uniform allocation, please see "base_unif_alloc.R", which uses a dummy parameter dataset "test input parameter.csv". For an example run of the optimal allocation using myopic strategies, please see "opt_myopic_alloc.R", which generates intermediate dataset "test input opt approxmation.csv".
 
